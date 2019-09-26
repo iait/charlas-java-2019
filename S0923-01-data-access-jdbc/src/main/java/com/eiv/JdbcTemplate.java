@@ -31,14 +31,13 @@ public class JdbcTemplate {
     }
     
     public <T> List<T> query(String sql, RowMapper<T> rowMapper) {
-        int rowNum = 0;
         ArrayList<T> result = new ArrayList<T>();
         try(Connection conn = dataSource.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery()) {
                 
                 while(rs.next()) {
-                    T t = rowMapper.mapRow(rs, rowNum);
+                    T t = rowMapper.mapRow(rs, rs.getRow());
                     result.add(t);
                 }
                 
